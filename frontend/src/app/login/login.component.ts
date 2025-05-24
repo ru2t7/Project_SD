@@ -25,6 +25,8 @@ export class LoginComponent {
       password: ['', Validators.required]
     });
   }
+  loginFailed = false;
+
 
   onSubmit(): void {
     if (this.loginForm.invalid) {
@@ -43,6 +45,7 @@ export class LoginComponent {
       },
       error: () => {
         this.errorMsg = 'Invalid username or password';
+        this.loginFailed = true;
       }
     });
   }

@@ -37,7 +37,6 @@ public class TaskService {
         existing.setDeadline(updatedTask.getDeadline());
         existing.setStatus(updatedTask.getStatus());
 
-        // ✅ Assign user if provided
         if (updatedTask.getUser() != null && updatedTask.getUser().getId() != null) {
             User user = userRepository.findById(updatedTask.getUser().getId())
                     .orElseThrow(() -> new RuntimeException("User not found"));

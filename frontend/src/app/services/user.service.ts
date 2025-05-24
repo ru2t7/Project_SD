@@ -29,5 +29,12 @@ export class UserService {
     return this.http.put<User>(`/api/users/${user.id}`, user);
   }
 
+  verifyPassword(id: number, password: string): Observable<boolean> {
+    return this.http.post<boolean>(`/api/users/${id}/verify-password`, password, {
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+
+
 
 }

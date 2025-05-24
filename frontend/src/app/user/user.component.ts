@@ -29,10 +29,28 @@ export class UserComponent {
     }
   }
 
+  currentPassword: string = '';
+
   updateAccount() {
-    this.userService.updateUser(this.user).subscribe(updated => {
-      this.user = updated;
-      alert('Account updated.');
+    if (!this.currentPassword) {
+      alert('Please enter your current password.');
+      return;
+    }
+
+    this.userService.verifyPassword(this.user.id!, this.currentPassword).subscribe({
+      next: (isValid) => {
+        if (!isValid) {
+          alert('Current password is incorrect.');
+          return;
+        }
+
+        this.userService.updateUser(this.user).subscribe(updated => {
+          this.user = updated;
+          this.currentPassword = '';
+          alert('Account updated.');
+        });
+      },
+      error: () => alert('Failed to verify password.')
     });
   }
 

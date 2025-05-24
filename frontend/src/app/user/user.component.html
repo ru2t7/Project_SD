@@ -9,8 +9,12 @@
   <label>Email:</label>
   <input [(ngModel)]="user.email" name="email" required /><br />
 
-  <label>Password:</label>
-  <input type="password" [(ngModel)]="user.password" name="password" /><br />
+  <label>Current Password:</label>
+  <input type="password" [(ngModel)]="currentPassword" name="currentPassword" required /><br />
+
+  <label>New Password:</label>
+  <input type="password" [(ngModel)]="user.password" name="newPassword" /><br />
 
   <button type="submit">Save Changes</button>
 </form>
+

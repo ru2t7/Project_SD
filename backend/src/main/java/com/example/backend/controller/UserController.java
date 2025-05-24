@@ -36,5 +36,13 @@ public class UserController {
         return ResponseEntity.ok(userService.updateUser(id, user));
     }
 
+    @PostMapping("/{id}/verify-password")
+    public ResponseEntity<Boolean> verifyPassword(@PathVariable Long id, @RequestBody String password) {
+        User user = userService.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return ResponseEntity.ok(user.getPassword().equals(password)); // plain-text check for now
+    }
+
+
 
 }

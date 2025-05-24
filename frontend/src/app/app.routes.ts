@@ -7,6 +7,7 @@ import { UserComponent } from './user/user.component';
 import { userGuard } from './guards/user.guard';
 import { adminGuard } from './guards/admin.guard';
 import {guestGuard} from './guards/guest.guard';
+import {UpdateAccountComponent} from './update-account/update-account.component';
 
 
 
@@ -26,6 +27,11 @@ export const routes: Routes = [
     path: 'user',
     component: UserComponent,
     canActivate: [userGuard]
+  },
+  {
+    path: 'update-account',
+    component: UpdateAccountComponent,
+    canActivate: [userGuard] // optional
   },
   { path: '**',       redirectTo: '' }
 ];

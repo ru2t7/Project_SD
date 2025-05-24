@@ -1,0 +1,17 @@
+<h2>Update Account</h2>
+
+<form (ngSubmit)="updateAccount()">
+  <label>Username:</label><br />
+  <input [(ngModel)]="user.username" name="username" required /><br />
+
+  <label>Email:</label><br />
+  <input [(ngModel)]="user.email" name="email" required /><br />
+
+  <label>Current Password:</label><br />
+  <input type="password" [(ngModel)]="currentPassword" name="currentPassword" required /><br />
+
+  <label>New Password:</label><br />
+  <input type="password" [(ngModel)]="user.password" name="newPassword" /><br /><br />
+
+  <button type="submit">Save Changes</button>
+</form>

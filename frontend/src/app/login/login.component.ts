@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService, LoginRequest, LoginResponse } from '../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -12,11 +13,12 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
   loginForm: FormGroup;
+  errorMsg = '';
 
   constructor(
     private fb: FormBuilder,
+    private authService: AuthService,
     private router: Router
-    // later: inject AuthService here
   ) {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
@@ -25,19 +27,23 @@ export class LoginComponent {
   }
 
   onSubmit(): void {
-    if (this.loginForm.invalid) return;
-
-    const { username, password } = this.loginForm.value;
-
-    // TODO: call your AuthService.login({ username, password })
-    //   .subscribe({
-    //     next: (res) => {
-    //       // store token, navigate based on role
-    //       this.router.navigate(['/user']); // or '/admin'
-    //     },
-    //     error: (err) => { /* show error message */ }
-    //   });
-
-    console.log('Login payload', { username, password });
+    if (this.loginForm.invalid) {
+      return;
+    }
+    this.errorMsg = '';
+    const creds: LoginRequest = this.loginForm.value;
+    this.authService.login(creds).subscribe({
+      next: (res: LoginResponse) => {
+        // Redirect based on role
+        if (res.role === 'ADMIN') {
+          this.router.navigate(['/admin']);
+        } else {
+          this.router.navigate(['/user']);
+        }
+      },
+      error: () => {
+        this.errorMsg = 'Invalid username or password';
+      }
+    });
   }
 }

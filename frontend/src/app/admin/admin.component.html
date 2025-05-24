@@ -1,3 +1,43 @@
 <h1>Admin Page</h1>
 <p>Welcome, admin!</p>
 <button (click)="logout()">Logout</button>
+
+<h3>Create New Task</h3>
+<form (ngSubmit)="createTask()">
+  <input type="text" placeholder="Title" [(ngModel)]="newTask.title" name="title" required />
+  <input type="text" placeholder="Description" [(ngModel)]="newTask.description" name="description" required />
+  <input type="date" [(ngModel)]="newTask.deadline" name="deadline" required />
+  <button type="submit">Add Task</button>
+</form>
+
+
+<h3>Tasks</h3>
+<table border="1" cellpadding="5" width="100%">
+  <thead>
+  <tr>
+    <th style="width: 150px;">Title</th>
+    <th>Description</th>
+    <th style="width: 120px;">Status</th>
+    <th style="width: 150px;">Deadline</th>
+    <th style="width: 80px;">Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let task of tasks">
+    <td><input [(ngModel)]="task.title" (blur)="updateTask(task)" /></td>
+    <td><input [(ngModel)]="task.description" (blur)="updateTask(task)" /></td>
+    <td>
+      <select [(ngModel)]="task.status" (change)="updateTask(task)">
+        <option value="TO_DO">TO_DO</option>
+        <option value="IN_PROGRESS">IN_PROGRESS</option>
+        <option value="DONE">DONE</option>
+      </select>
+    </td>
+    <td><input type="date" [(ngModel)]="task.deadline" (blur)="updateTask(task)" /></td>
+    <td><button (click)="deleteTask(task.id)">Delete</button></td>
+  </tr>
+  </tbody>
+</table>
+
+
+

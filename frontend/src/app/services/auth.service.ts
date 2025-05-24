@@ -21,12 +21,12 @@ export interface LoginResponse {
 export class AuthService {
   private apiUrl = '/api/auth';
   private currentUserSubject = new BehaviorSubject<LoginResponse | null>(
-    JSON.parse(localStorage.getItem('currentUser') || 'null')
+    typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('currentUser') || 'null'): null
   );
   currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(private http: HttpClient) {
-    const user = localStorage.getItem('currentUser');
+    const user = typeof window !== 'undefined' ? localStorage.getItem('currentUser') : null;
     this.currentUserSubject = new BehaviorSubject<LoginResponse | null>(
       user ? JSON.parse(user) : null
     );

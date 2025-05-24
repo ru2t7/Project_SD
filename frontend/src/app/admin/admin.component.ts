@@ -54,7 +54,8 @@ export class AdminComponent {
     this.taskService.createTask(this.newTask).subscribe(created => {
       this.tasks.push(created);
       // @ts-ignore
-      this.newTask = {user: {id: undefined}, title: '', description: '', deadline: '' };
+      this.newTask = { user_id: 0, title: '', description: '', deadline: '' };
+      this.newTask = { ...this.newTask };
     });
   }
   updateTask(task: Task) {

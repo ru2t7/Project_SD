@@ -1,6 +1,34 @@
 <h1>User Page</h1>
 <p>Welcome, user!</p>
 <button (click)="logout()">Logout</button>
+
+<h3>Your Assigned Tasks</h3>
+<table border="1" width="100%">
+  <thead>
+  <tr>
+    <th>Title</th>
+    <th>Description</th>
+    <th>Status</th>
+    <th>Deadline</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let task of tasks">
+    <td>{{ task.title }}</td>
+    <td>{{ task.description }}</td>
+    <td>
+      <select [(ngModel)]="task.status" (change)="updateStatus(task)">
+        <option value="TO_DO">TO_DO</option>
+        <option value="IN_PROGRESS">IN_PROGRESS</option>
+        <option value="DONE">DONE</option>
+      </select>
+    </td>
+    <td>{{ task.deadline }}</td>
+  </tr>
+  </tbody>
+</table>
+
+
 <h2>Update Account</h2>
 <button [routerLink]="['/update-account']">Update Account</button>
 

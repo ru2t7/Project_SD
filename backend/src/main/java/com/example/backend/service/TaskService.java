@@ -53,5 +53,9 @@ public class TaskService {
         taskRepository.deleteById(id);
     }
 
+    public List<Task> findByUserId(Long userId){
+       return taskRepository.findByUserId(userId);
+    }
+
 
 }

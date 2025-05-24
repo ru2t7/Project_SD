@@ -53,5 +53,11 @@ public class TaskController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Task>> getTasksForUser(@PathVariable Long userId) {
+        List<Task> tasks = taskService.findByUserId(userId);
+        return ResponseEntity.ok(tasks);
+    }
+
 
 }

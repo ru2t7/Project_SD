@@ -23,6 +23,10 @@ export class TaskService {
   deleteTask(id: number): Observable<void> {
     return this.http.delete<void>(`/api/tasks/${id}`);
   }
+  getUserTasks(userId: number): Observable<Task[]> {
+    return this.http.get<Task[]>(`/api/tasks/user/${userId}`);
+  }
+
 
 
 

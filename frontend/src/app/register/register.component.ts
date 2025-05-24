@@ -14,6 +14,9 @@ export class RegisterComponent {
   registerForm: FormGroup;
 
   roles = ['USER', 'ADMIN'];
+  successMsg = '';
+  errorMsg = '';
+
 
   constructor(private fb: FormBuilder,
               private userService: UserService
@@ -27,17 +30,26 @@ export class RegisterComponent {
   }
 
   onSubmit(): void {
-    if (this.registerForm.valid) {
-      const user: User = this.registerForm.value;
-      this.userService.createUser(user).subscribe({
-        next: (created) => {
-          console.log('User created:', created);
-          // TODO: navigate to login or user page
-        },
-        error: (err) => {
-          console.error('Error creating user:', err);
-        }
-      });
+    if (!this.registerForm.valid) {
+      return;
     }
+    this.successMsg = '';
+    this.errorMsg = '';
+    const user: User = this.registerForm.value;
+
+    this.userService.createUser(user).subscribe({
+      next: created => {
+        this.successMsg = `User “${created.username}” registered successfully!`;
+        this.registerForm.reset({ role: 'USER' });
+      },
+      error: err => {
+        const msg = err.error?.message;
+        if (err.status === 500 && msg?.includes('duplicate key')) {
+          this.errorMsg = 'Username or email already exists.';
+        } else {
+          this.errorMsg = msg || 'Registration failed. Please try again.';
+        }
+      }
+    });
   }
 }

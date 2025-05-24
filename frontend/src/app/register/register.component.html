@@ -32,3 +32,6 @@
 
   <button type="submit" [disabled]="registerForm.invalid">Register</button>
 </form>
+
+<p *ngIf="successMsg" class="text-green-600">{{ successMsg }}</p>
+<p *ngIf="errorMsg"   class="text-red-600">{{ errorMsg }}</p>

@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import com.example.backend.entity.User;
 import com.example.backend.service.UserService;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/users")
@@ -23,4 +25,10 @@ public class UserController {
         User saved = userService.createUser(user);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
+
+    @GetMapping
+    public ResponseEntity<List<User>> getAllUsers() {
+        return ResponseEntity.ok(userService.findAll());
+    }
+
 }

@@ -20,6 +20,7 @@
     <th style="width: 120px;">Status</th>
     <th style="width: 150px;">Deadline</th>
     <th style="width: 80px;">Actions</th>
+    <th style="width: 150px;">Assigned User</th>
   </tr>
   </thead>
   <tbody>
@@ -35,6 +36,15 @@
     </td>
     <td><input type="date" [(ngModel)]="task.deadline" (blur)="updateTask(task)" /></td>
     <td><button (click)="deleteTask(task.id)">Delete</button></td>
+    <td>
+      <select [(ngModel)]="task.user_id" (change)="onUserAssign(task)">
+        <option [ngValue]="0">Unassigned</option>
+        <option *ngFor="let user of users" [ngValue]="user.id">{{ user.username }}</option>
+      </select>
+    </td>
+
+
+
   </tr>
   </tbody>
 </table>

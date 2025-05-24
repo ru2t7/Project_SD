@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import {User} from './user.service';
 
 @Injectable({ providedIn: 'root' })
 export class TaskService {
@@ -20,8 +21,9 @@ export class TaskService {
     return this.http.put<Task>(`${this.apiUrl}/${task.id}`, task);
   }
   deleteTask(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(`/api/tasks/${id}`);
   }
+
 
 
 }
@@ -29,10 +31,11 @@ export class TaskService {
 
 type TaskStatus = 'TO_DO' | 'IN_PROGRESS' | 'DONE';
 
-interface Task {
+export interface Task {
   id?: number;
   title: string;
   description: string;
   deadline: string;
   status?: TaskStatus;
+  user_id: number;
 }

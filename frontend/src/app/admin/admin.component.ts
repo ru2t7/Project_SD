@@ -2,8 +2,9 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
-import { TaskService } from '../services/task.service';
+import {Task, TaskService } from '../services/task.service';
 import {FormsModule} from '@angular/forms';
+import {User, UserService} from '../services/user.service';
 
 @Component({
   selector: 'app-admin',
@@ -14,9 +15,13 @@ import {FormsModule} from '@angular/forms';
 })
 export class AdminComponent {
   tasks: Task[] = [];
+  users: User[] = [];
+
+
   constructor(
     private authService: AuthService,
     private taskService: TaskService,
+    private userService: UserService,
     private router: Router
   ) {}
 
@@ -27,24 +32,38 @@ export class AdminComponent {
 
   ngOnInit() {
     this.taskService.getTasks().subscribe(data => {
-      this.tasks = data;
+      this.tasks = data.map(task => ({
+        ...task,
+        user_id: (task as any).user?.id || 0 // extract user.id into userId
+      }));
     });
+
+    this.userService.getAllUsers().subscribe(data => this.users = data);
   }
 
+
   newTask: Task = {
+    user_id: 0,
     title: '',
     description: '',
-    deadline: ''
+    deadline: '',
+
   };
 
   createTask() {
     this.taskService.createTask(this.newTask).subscribe(created => {
       this.tasks.push(created);
-      this.newTask = { title: '', description: '', deadline: '' };
+      // @ts-ignore
+      this.newTask = {user: {id: undefined}, title: '', description: '', deadline: '' };
     });
   }
   updateTask(task: Task) {
-    this.taskService.updateTask(task).subscribe();
+    const payload: any = {
+      ...task,
+      user: task.user_id !== 0 ? { id: task.user_id } : null
+    };
+    console.log('Sending payload:', payload); // Add this
+    this.taskService.updateTask(payload).subscribe();
   }
 
   deleteTask(id: number | undefined) {
@@ -54,18 +73,16 @@ export class AdminComponent {
     });
   }
 
-
+  onUserAssign(task: Task) {
+    const payload: any = {
+      ...task,
+      user: task.user_id !== 0 ? { id: task.user_id } : null
+    };
+    console.log('Sending payload:', payload);
+    this.taskService.updateTask(payload).subscribe();
+  }
 
 }
 
 
-type TaskStatus = 'TO_DO' | 'IN_PROGRESS' | 'DONE';
-
-interface Task {
-  id?: number;
-  title: string;
-  description: string;
-  deadline: string;
-  status?: TaskStatus;
-}
 

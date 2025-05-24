@@ -1,7 +1,9 @@
 package com.example.backend.service;
 
 import com.example.backend.entity.Task;
+import com.example.backend.entity.User;
 import com.example.backend.repository.TaskRepository;
+import com.example.backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,9 +12,11 @@ import java.util.List;
 public class TaskService {
 
     private final TaskRepository taskRepository;
+    private final UserRepository userRepository;
 
-    public TaskService(TaskRepository taskRepository) {
+    public TaskService(TaskRepository taskRepository, UserRepository userRepository) {
         this.taskRepository = taskRepository;
+        this.userRepository = userRepository;
     }
 
     public Task createTask(Task task) {
@@ -33,8 +37,18 @@ public class TaskService {
         existing.setDeadline(updatedTask.getDeadline());
         existing.setStatus(updatedTask.getStatus());
 
+        // ✅ Assign user if provided
+        if (updatedTask.getUser() != null && updatedTask.getUser().getId() != null) {
+            User user = userRepository.findById(updatedTask.getUser().getId())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            existing.setUser(user);
+        } else {
+            existing.setUser(null); // support unassigning
+        }
+
         return taskRepository.save(existing);
     }
+
 
     public void deleteTask(Long id) {
         taskRepository.deleteById(id);

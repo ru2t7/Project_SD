@@ -5,6 +5,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.backend.entity.User;
 import com.example.backend.repository.UserRepository;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class UserService {
 
@@ -16,7 +19,14 @@ public class UserService {
 
     @Transactional
     public User createUser(User user) {
-        // Encode the password maybe
         return userRepository.save(user);
+    }
+
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 }

@@ -20,21 +20,30 @@ export interface LoginResponse {
 })
 export class AuthService {
   private apiUrl = '/api/auth';
-  private currentUserSubject = new BehaviorSubject<LoginResponse | null>(null);
+  private currentUserSubject = new BehaviorSubject<LoginResponse | null>(
+    JSON.parse(localStorage.getItem('currentUser') || 'null')
+  );
   currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    const user = localStorage.getItem('currentUser');
+    this.currentUserSubject = new BehaviorSubject<LoginResponse | null>(
+      user ? JSON.parse(user) : null
+    );
+  }
 
   login(req: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.apiUrl}/login`, req).pipe(
-      tap(user => this.currentUserSubject.next(user))
-    );
+      tap(user => {this.currentUserSubject.next(user);
+                                localStorage.setItem('currentUser', JSON.stringify(user));}
+      ));
   }
   get currentUser(): LoginResponse | null {
     return this.currentUserSubject.value;
   }
 
   logout(): void {
+    localStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);
   }
 

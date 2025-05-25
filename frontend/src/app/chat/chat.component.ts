@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { WebSocketService, ChatMessage } from '../services/web-socket.service';
 import { AuthService } from '../services/auth.service';
 import {Router, RouterLink} from '@angular/router';
+import {ChatLogService} from '../services/chatlog.service';
 
 @Component({
   selector: 'app-chat',
@@ -15,9 +16,19 @@ export class ChatComponent implements OnInit {
   messages: ChatMessage[] = [];
   newMessage = '';
 
-  constructor(private ws: WebSocketService, private auth: AuthService,private router: Router) {}
+  constructor(
+    private ws: WebSocketService,
+    private auth: AuthService,
+    private router: Router,
+    private logService: ChatLogService
+  ) {}
 
   ngOnInit() {
+    this.logService.getLogs().subscribe(logs =>
+      this.messages = logs.map(l => ({
+        sender: l.sender, content: l.content, timestamp: l.timestamp
+      }))
+    );
     this.ws.message$.subscribe(msg => {
       this.messages.push(msg);
     });

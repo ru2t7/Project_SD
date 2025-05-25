@@ -1,8 +1,12 @@
 package com.example.backend.controller;
 
+import java.time.Instant;
 import java.util.Map;
 import java.util.Optional;
 
+import com.example.backend.entity.UserActivity;
+import com.example.backend.repository.UserActivityRepository;
+import com.example.backend.repository.UserRepository;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.http.HttpStatus;
@@ -23,17 +27,33 @@ record LoginRequest(@NotBlank String username,   @NotBlank String password) {}
 public class AuthController {
 
     private final AuthService authService;
+    private final UserActivityRepository activityRepo;
+    private final UserRepository userRepository;
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, UserActivityRepository activityRepo, UserRepository userRepository) {
         this.authService = authService;
+        this.activityRepo = activityRepo;
+        this.userRepository = userRepository;
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest login) {
         Optional<User> userOpt = authService.authenticate(login.username(), login.password());
-        return userOpt
-                .<ResponseEntity<?>>map(user -> ResponseEntity.ok(user))
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(Map.of("error", "Invalid credentials")));
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            activityRepo.save(new UserActivity(user, "LOGIN", Instant.now()));
+            return ResponseEntity.ok(user);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "Invalid credentials"));
+        }
     }
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(@RequestBody Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        activityRepo.save(new UserActivity(user, "LOGOUT", Instant.now()));
+        return ResponseEntity.ok().build();
+    }
+
 }

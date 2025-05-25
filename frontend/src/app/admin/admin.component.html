@@ -46,6 +46,20 @@
   </tbody>
 </table>
 
+<!-- admin.component.html -->
+<h3>Login/Logout Activity</h3>
+<table width="100%" border="1">
+  <thead><tr><th>User</th><th>Action</th><th>When</th></tr></thead>
+  <tbody>
+  <tr *ngFor="let a of activities">
+    <td>{{ a.user.username }}</td>
+    <td>{{ a.action }}</td>
+    <td>{{ a.timestamp | date:'short' }}</td>
+  </tr>
+  </tbody>
+</table>
+
+
 <button [routerLink]="['/chat']">Open Chat</button>
 
 

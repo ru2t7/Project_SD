@@ -30,8 +30,11 @@ export class RegisterComponent {
     });
   }
 
+  validationErrors: { [key:string]:string } = {}
+
   onSubmit(): void {
     if (!this.registerForm.valid) {
+      this.registerForm.markAllAsTouched();
       return;
     }
     this.successMsg = '';
@@ -44,11 +47,14 @@ export class RegisterComponent {
         this.registerForm.reset({ role: 'USER' });
       },
       error: err => {
-        const msg = err.error?.message;
-        if (err.status === 500 && msg?.includes('duplicate key')) {
+        if (err.status === 400) {
+          this.validationErrors = err.error;
+          return;
+        }
+        if (err.status === 500 && err.error?.message?.includes('duplicate key')) {
           this.errorMsg = 'Username or email already exists.';
         } else {
-          this.errorMsg = msg || 'Registration failed. Please try again.';
+          this.errorMsg = err.error?.message || 'Registration failed. Please try again.';
         }
       }
     });

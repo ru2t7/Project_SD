@@ -2,15 +2,21 @@
   <div>
     <label for="username">Username</label>
     <input id="username" formControlName="username" />
-    <div *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched">
-      Username is required.
+    <div *ngIf="validationErrors['username']" class="text-red-600">
+      {{ validationErrors['username'] }}</div>
+    <div *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched" class="text-red-600">
+      <div *ngIf="registerForm.get('username')?.errors?.['required']">
+        Username is required.
+      </div>
     </div>
   </div>
 
   <div>
     <label for="email">Email</label>
     <input id="email" formControlName="email" />
-    <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+    <div *ngIf="validationErrors['email']" class="text-red-600">
+      {{ validationErrors['email'] }}
+    </div><div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
       <div *ngIf="registerForm.get('email')?.errors?.['required']">Email is required.</div>
       <div *ngIf="registerForm.get('email')?.errors?.['email']">Invalid email format.</div>
     </div>
@@ -19,9 +25,12 @@
   <div>
     <label for="password">Password</label>
     <input id="password" type="password" formControlName="password" />
-    <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+      <div *ngIf="validationErrors['password']" class="text-red-600">
+       {{ validationErrors['password'] }}
+      </div>
+      <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
       <div *ngIf="registerForm.get('password')?.errors?.['required']">Password is required.</div>
-      <div *ngIf="registerForm.get('password')?.errors?.['minlength']">
+     <div *ngIf="registerForm.get('password')?.errors?.['minlength']">-->
         Password must be at least 6 characters.
       </div>
     </div>
@@ -30,7 +39,7 @@
   <!-- fixed to USER -->
   <input type="hidden" formControlName="role" />
 
-  <button type="submit" [disabled]="registerForm.invalid">Register</button>
+  <button type="submit" [disabled]="registerForm.invalid" >Register</button>
 </form>
 
 <p *ngIf="successMsg" class="text-green-600">{{ successMsg }}</p>

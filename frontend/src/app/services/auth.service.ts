@@ -43,6 +43,10 @@ export class AuthService {
   }
 
   logout(): void {
+    const user = this.currentUser;
+    if (user?.id) {
+      this.http.post<void>('/api/auth/logout', user.id).subscribe();
+    }
     localStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);
   }

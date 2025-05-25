@@ -5,6 +5,7 @@ import {Router, RouterLink} from '@angular/router';
 import {Task, TaskService } from '../services/task.service';
 import {FormsModule} from '@angular/forms';
 import {User, UserService} from '../services/user.service';
+import {ActivityService, UserActivity} from '../services/activity.service';
 
 @Component({
   selector: 'app-admin',
@@ -16,12 +17,13 @@ import {User, UserService} from '../services/user.service';
 export class AdminComponent {
   tasks: Task[] = [];
   users: User[] = [];
-
+  activities: UserActivity[] = [];
 
   constructor(
     private authService: AuthService,
     private taskService: TaskService,
     private userService: UserService,
+    private activityService: ActivityService,
     private router: Router
   ) {}
 
@@ -38,6 +40,7 @@ export class AdminComponent {
       }));
     });
 
+    this.activityService.getActivities().subscribe(data => this.activities = data);
     this.userService.getAllUsers().subscribe(data => this.users = data);
   }
 

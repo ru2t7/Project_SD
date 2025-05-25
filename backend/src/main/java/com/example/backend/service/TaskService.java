@@ -4,6 +4,7 @@ import com.example.backend.entity.Task;
 import com.example.backend.entity.User;
 import com.example.backend.repository.TaskRepository;
 import com.example.backend.repository.UserRepository;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

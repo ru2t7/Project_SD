@@ -1,6 +1,9 @@
 package com.example.backend.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotBlank;
+
 import java.time.LocalDate;
 
 
@@ -18,10 +21,13 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Title is required")
     private String title;
 
+    @NotBlank(message = "Description is required")
     private String description;
 
+    @Future(message = "Deadline must be in the future")
     private LocalDate deadline;
 
     @Enumerated(EnumType.STRING)

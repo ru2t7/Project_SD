@@ -3,6 +3,8 @@ package com.example.backend.controller;
 import java.util.Map;
 import java.util.Optional;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,7 +16,7 @@ import com.example.backend.entity.User;
 import com.example.backend.service.AuthService;
 
 // DTO for login credentials
-record LoginRequest(String username, String password) {}
+record LoginRequest(@NotBlank String username,   @NotBlank String password) {}
 
 @RestController
 @RequestMapping("/api/auth")
@@ -27,7 +29,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest login) {
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest login) {
         Optional<User> userOpt = authService.authenticate(login.username(), login.password());
         return userOpt
                 .<ResponseEntity<?>>map(user -> ResponseEntity.ok(user))

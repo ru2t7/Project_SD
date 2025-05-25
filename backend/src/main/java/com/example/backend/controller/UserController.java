@@ -1,13 +1,16 @@
 package com.example.backend.controller;
 
+import jakarta.validation.Valid;
+
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.backend.entity.User;
 import com.example.backend.service.UserService;
 
-import java.util.List;
 
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -20,8 +23,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        System.out.println("📥 Incoming user payload → username=" + user.getUsername()    + ", email=" + user.getEmail()  + ", role=" + user.getRole() + ", password=" + user.getPassword());
+    public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
         User saved = userService.createUser(user);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
@@ -32,7 +34,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
+    public ResponseEntity<User> updateUser(@PathVariable Long id,  @RequestBody User user) {
         return ResponseEntity.ok(userService.updateUser(id, user));
     }
 

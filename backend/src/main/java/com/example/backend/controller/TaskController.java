@@ -4,6 +4,7 @@ import com.example.backend.entity.Task;
 import com.example.backend.entity.User;
 import com.example.backend.service.TaskService;
 import com.example.backend.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +29,7 @@ public class TaskController {
     }
 
     @PostMapping
-    public ResponseEntity<Task> createTask(@RequestBody Task task) {
+    public ResponseEntity<Task> createTask(@Valid  @RequestBody Task task) {
         if (task.getUser() != null && task.getUser().getId() != null) {
             User user = userService.findById(task.getUser().getId())
                     .orElseThrow(() -> new RuntimeException("User not found"));
@@ -38,7 +39,7 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody Task task) {
+    public ResponseEntity<Task> updateTask(@PathVariable Long id, @Valid @RequestBody Task task) {
         if (task.getUser() != null && task.getUser().getId() != null) {
             User user = userService.findById(task.getUser().getId())
                     .orElseThrow(() -> new RuntimeException("User not found"));

@@ -8,6 +8,7 @@ import { userGuard } from './guards/user.guard';
 import { adminGuard } from './guards/admin.guard';
 import {guestGuard} from './guards/guest.guard';
 import {UpdateAccountComponent} from './update-account/update-account.component';
+import {ChatComponent} from './chat/chat.component';
 
 
 
@@ -16,6 +17,7 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent, canActivate: [guestGuard] },
   { path: 'login',    component: LoginComponent,  canActivate: [guestGuard] },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: 'chat', component: ChatComponent, canActivate: [userGuard] }, // optional guard
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   {

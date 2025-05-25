@@ -42,12 +42,13 @@
         <option *ngFor="let user of users" [ngValue]="user.id">{{ user.username }}</option>
       </select>
     </td>
-
-
-
   </tr>
   </tbody>
 </table>
+
+<button [routerLink]="['/chat']">Open Chat</button>
+
+
 
 
 

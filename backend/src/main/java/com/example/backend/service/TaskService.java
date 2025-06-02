@@ -37,14 +37,14 @@ public class TaskService {
         existing.setDescription(updatedTask.getDescription());
         existing.setDeadline(updatedTask.getDeadline());
         existing.setStatus(updatedTask.getStatus());
-
         if (updatedTask.getUser() != null && updatedTask.getUser().getId() != null) {
             User user = userRepository.findById(updatedTask.getUser().getId())
                     .orElseThrow(() -> new RuntimeException("User not found"));
             existing.setUser(user);
-        } else {
-            existing.setUser(null); // support unassigning
         }
+//        else {
+//            existing.setUser(null); // support unassigning
+//        }
 
         return taskRepository.save(existing);
     }

@@ -64,7 +64,7 @@ export class AdminComponent {
   updateTask(task: Task) {
     const payload: any = {
       ...task,
-      user: task.user_id !== 0 ? { id: task.user_id } : null
+      user: task.user_id ? { id: task.user_id} : null
     };
     console.log('Sending payload:', payload); // Add this
     this.taskService.updateTask(payload).subscribe();

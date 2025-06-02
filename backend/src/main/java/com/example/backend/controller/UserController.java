@@ -37,6 +37,10 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id,  @RequestBody User user) {
+
+        if (user.getPassword() != null && !user.getPassword().isBlank()) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
         return ResponseEntity.ok(userService.updateUser(id, user));
     }
 
@@ -44,7 +48,7 @@ public class UserController {
     public ResponseEntity<Boolean> verifyPassword(@PathVariable Long id, @RequestBody String password) {
         User user = userService.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        return ResponseEntity.ok(user.getPassword().equals(password)); // plain-text check for now
+        return ResponseEntity.ok(passwordEncoder.matches(password, user.getPassword()));
     }
 
 
